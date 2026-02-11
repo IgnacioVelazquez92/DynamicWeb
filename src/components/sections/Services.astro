@@ -1,0 +1,42 @@
+---
+import Service from "../cards/Service.astro";
+import Container from "../shared/Container.astro";
+import Paragraph from "../shared/Paragraph.astro";
+import Title from "../shared/Title.astro";
+import { services } from "../../utils/data.ts";
+
+type ServicesProps = {
+  title: string;
+  description: string;
+  icon: string;
+};
+---
+
+<section id="services">
+  <Container className="space-y-10 md:sapce-y-12">
+    <div class="text-center max-w-3xl mx-auto space-y-4">
+      <Title> Nuestros Servicios </Title>
+      <Paragraph>
+        Brindamos soluciones integrales de logística y distribución para el
+        sector farmacéutico.
+      </Paragraph>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      <Service
+        title="Logística Farmacéutica"
+        description="Distribución eficiente y segura a farmacias y centros de salud en todo el país."
+        icon="/images/icon1.png"
+      />
+      <Service
+        title="Cadena de Frío"
+        description="Garantizamos la integridad de productos termosensibles con monitoreo constante."
+        icon="/images/icon2.png"
+      />
+      <Service
+        title="Atención Personalizada"
+        description="Equipo comercial dedicado para asistir a nuestros clientes en cada requerimiento."
+        icon="/images/icon3.png"
+      />
+    </div>
+  </Container>
+</section>

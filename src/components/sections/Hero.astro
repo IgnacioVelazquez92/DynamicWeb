@@ -1,0 +1,93 @@
+---
+import Button from "../shared/Button.astro";
+import BtnLink from "../shared/BtnLink.astro";
+import Container from "../shared/Container.astro";
+import Paragraph from "../shared/Paragraph.astro";
+import ByNumber from "./ByNumber.astro";
+---
+
+<section class="relative pt-32 lg:pt-36 overflow-hidden">
+  <!-- Background Elements -->
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+    <div class="absolute w-full lg:w-1/2 inset-y-0 lg:right-0">
+      <span
+        class="absolute -left-6 md:left-4 top-24 lg:top-28 w-24 h-24 rotate-90 skew-x-12 rounded-3xl bg-secondary blur-xl opacity-60 lg:opacity-95 lg:block hidden animate-float"
+      ></span>
+      <span
+        class="absolute right-4 bottom-12 w-24 h-24 rounded-3xl bg-primary blur-xl opacity-80 animate-float delay-300"
+      ></span>
+    </div>
+    <span
+      class="w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-primary to-secondary absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90 animate-pulse-slow"
+    ></span>
+
+    <!-- Subtle Grid Pattern -->
+    <div
+      class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+    >
+    </div>
+  </div>
+
+  <Container className={"flex flex-col lg:flex-row gap-10 lg:gap-12"}>
+    <div
+      class="relative flex flex-col items-center text-center lg:text-left lg:py-7 xl:py-8
+        lg:items-start lg:max-w-none max-w-3xl mx-auto lg:mx-0 lg:flex-1 lg:w-1/2"
+    >
+      <h1
+        class="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight xl:text-6xl/tight
+             font-bold text-heading-1 opacity-0 animate-fade-in-up"
+      >
+        Excelencia en <span
+          class="text-transparent bg-clip-text bg-gradient-to-br from-primary from-20% via-primary via-30% to-secondary"
+          >Distribución Farmacéutica</span
+        > Integral.
+      </h1>
+      <Paragraph className="mt-8 opacity-0 animate-fade-in-up delay-100">
+        Dynamic SA es su socio estratégico en salud. Garantizamos rapidez,
+        seguridad y compromiso en cada entrega, conectando laboratorios con
+        farmacias en todo el país.
+      </Paragraph>
+      <div
+        class="mt-10 w-full flex max-w-md mx-auto lg:mx-0 opacity-0 animate-fade-in-up delay-200"
+      >
+        <div class="flex sm:flex-row flex-col gap-5 w-full">
+          <div class="flex flex-col sm:flex-row gap-4 w-full">
+            <BtnLink
+              text="Contáctenos"
+              href="#contact"
+              className="flex justify-center w-full sm:w-max shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-shadow"
+              variant="primary"
+            />
+
+            <BtnLink
+              text="Nuestros Servicios"
+              href="#services"
+              className="flex justify-center w-full sm:w-max text-primary border-primary hover:bg-primary/5"
+              variant="outline"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-1 lg:w-1/2 lg:h-auto relative lg:max-w-none lg:mx-0 mx-auto max-w-3xl opacity-0 animate-fade-in-up delay-300"
+    >
+      <div class="relative">
+        <div
+          class="absolute inset-0 bg-gradient-to-tr from-primary to-transparent opacity-20 rounded-3xl -rotate-2 scale-105 blur-lg"
+        >
+        </div>
+        <img
+          src="/logos/Dynamic_Identidad_Final2026.svg"
+          alt="Distribución Farmacéutica"
+          width="1500"
+          height="1500"
+          class="relative w-full h-full rounded-3xl object-cover shadow-2xl shadow-gray-200/50 dark:shadow-none transform transition-transform hover:scale-[1.02] duration-500"
+        />
+      </div>
+    </div>
+  </Container>
+
+  <ByNumber />
+</section>

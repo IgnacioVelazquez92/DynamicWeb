@@ -1,0 +1,19 @@
+---
+import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/sections/Hero.astro";
+import Services from "../components/sections/Services.astro";
+import AboutUs from "../components/sections/AboutUs.astro";
+import CTA from "../components/sections/CTA.astro";
+import Contact from "../components/sections/Contact.astro";
+---
+
+<Layout title="Distribución Farmacéutica">
+  <main class="flex flex-col gap-y-20 md:gap-y-32 overflow-hidden">
+    <Hero />
+    <Services />
+    <AboutUs />
+    <CTA />
+    <Contact />
+  </main>
+</Layout>
