@@ -5,27 +5,72 @@ import BackToTop from "../components/elements/BackToTop.astro";
 
 export interface Props {
   title: string;
+  description?: string;
+  keywords?: string;
+  image?: string;
+  noindex?: boolean;
+  type?: "website" | "article";
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const { title } = Astro.props;
+const {
+  title,
+  description = "Dynamic SA: drogueria y distribuidora farmaceutica en Cordoba y Tucuman. Venta y distribucion de medicamentos e insumos medicos para farmacias, clinicas y centros de salud.",
+  keywords = "drogueria, distribuidora farmaceutica, medicamentos, insumos medicos, Cordoba, Tucuman, Dynamic SA, distribucion de medicamentos",
+  image = "/logos/Dynamic.png",
+  noindex = false,
+  type = "website",
+  structuredData,
+} = Astro.props;
+
+const siteUrl = Astro.site ?? new URL(Astro.url.origin);
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImageUrl = new URL(image, siteUrl).toString();
+const robotsContent = noindex ? "noindex, nofollow" : "index, follow";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es-AR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
     <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Dynamic SA - Droguería y Distribuidora Farmacéutica. Compromiso, agilidad y confianza."
-    />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="robots" content={robotsContent} />
+    <meta name="author" content="Dynamic SA" />
+    <meta name="theme-color" content="#004182" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={`Dynamic SA - ${title}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Dynamic SA" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`Dynamic SA - ${title}`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
     <title>Dynamic SA - {title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    {
+      structuredData && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(structuredData)}
+        />
+      )
+    }
   </head>
   <body class="overflow-hidden overflow-y-auto bg-body">
     <Navbar />
