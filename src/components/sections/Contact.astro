@@ -69,18 +69,16 @@ import Title from "../shared/Title.astro";
       </div>
 
       <!-- Maps Section -->
-      <div class="space-y-3 flex flex-col">
+      <div class="space-y-4 md:space-y-3 md:h-full md:flex md:flex-col">
         <!-- Map Tucumán -->
-        <div class="flex flex-col flex-1">
+        <div class="md:flex md:flex-col md:flex-1">
           <h3 class="text-xs font-semibold text-heading-1 mb-2">Tucumán</h3>
           <div
-            class="bg-box-bg border border-box-border rounded-lg p-2 shadow-lg shadow-box-shadow flex-1 relative overflow-hidden h-[140px]"
+            class="bg-box-bg border border-box-border rounded-lg p-2 shadow-lg shadow-box-shadow relative overflow-hidden aspect-[4/3] sm:aspect-[16/10] md:aspect-auto md:h-full md:min-h-[140px] lg:min-h-[170px]"
           >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.6097577275386!2d-65.22009663797758!3d-26.82055173209453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225c41616bd0a1%3A0xfb9f135ff1a7a3f3!2sSantiago%20del%20Estero%201616%2C%20T4000%20San%20Miguel%20de%20Tucum%C3%A1n%2C%20Tucum%C3%A1n!5e0!3m2!1ses!2sar!4v1770856781622!5m2!1ses!2sar"
-              width="100%"
-              height="100%"
-              style="border:0; position: absolute; inset: 0; border-radius: 6px;"
+              class="absolute inset-0 h-full w-full rounded-md border-0"
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
@@ -90,16 +88,14 @@ import Title from "../shared/Title.astro";
         </div>
 
         <!-- Map Córdoba -->
-        <div class="flex flex-col flex-1">
+        <div class="md:flex md:flex-col md:flex-1">
           <h3 class="text-xs font-semibold text-heading-1 mb-2">Córdoba</h3>
           <div
-            class="bg-box-bg border border-box-border rounded-lg p-2 shadow-lg shadow-box-shadow flex-1 relative overflow-hidden h-[140px]"
+            class="bg-box-bg border border-box-border rounded-lg p-2 shadow-lg shadow-box-shadow relative overflow-hidden aspect-[4/3] sm:aspect-[16/10] md:aspect-auto md:h-full md:min-h-[140px] lg:min-h-[170px]"
           >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3407.6257921809465!2d-64.2255962116166!3d-31.34170608621965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9432995bfb48f1c9%3A0x40af1794d6a98047!2sLino%20Eneas%20Spilimbergo%206392%2C%20X5003DEV%20C%C3%B3rdoba!5e0!3m2!1ses!2sar!4v1770856916523!5m2!1ses!2sar"
-              width="100%"
-              height="100%"
-              style="border:0; position: absolute; inset: 0; border-radius: 6px;"
+              class="absolute inset-0 h-full w-full rounded-md border-0"
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
@@ -113,3 +109,6 @@ import Title from "../shared/Title.astro";
 
   </Container>
 </section>
+
+
+
