@@ -28,7 +28,7 @@ const logoSvg = await readFile(logoPath, "utf8");
   .hero-logo-svg :global(.letter) {
     transform-box: fill-box;
     backface-visibility: hidden;
-    will-change: transform, opacity;
+    will-change: transform, opacity, fill;
   }
 </style>
 
@@ -71,29 +71,97 @@ const logoSvg = await readFile(logoPath, "utf8");
       logoBlock.dataset.gsapReady = "true";
       const media = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-      let pulseTween: gsap.core.Tween | null = null;
-      let pulseDelay: gsap.core.Tween | null = null;
+      let loopTimeline: gsap.core.Timeline | null = null;
+      let loopDelay: gsap.core.Tween | null = null;
+      let isVisible = true;
 
       const clearLoop = () => {
-        pulseTween?.kill();
-        pulseDelay?.kill();
-        pulseTween = null;
-        pulseDelay = null;
+        loopTimeline?.kill();
+        loopDelay?.kill();
+        loopTimeline = null;
+        loopDelay = null;
       };
 
       const playLoop = () => {
+        if (!isVisible || media.matches) return;
         clearLoop();
-        pulseTween = gsap.to(mark, {
-          scaleX: 1.03,
-          duration: 0.75,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: 1,
-          overwrite: "auto",
+
+        loopTimeline = gsap.timeline({
+          defaults: { overwrite: "auto" },
           onComplete: () => {
-            pulseDelay = gsap.delayedCall(7.2, playLoop);
+            loopDelay = gsap.delayedCall(5.8, playLoop);
           },
         });
+
+        // Micro-gesto de la D
+        loopTimeline
+          .to(
+            mark,
+            {
+              rotation: -0.8,
+              x: 1,
+              duration: 0.24,
+              ease: "power2.out",
+              transformOrigin: "left center",
+              transformBox: "fill-box",
+            },
+            0
+          )
+          .to(
+            mark,
+            {
+              rotation: 0,
+              x: 0,
+              duration: 0.42,
+              ease: "sine.out",
+            },
+            0.24
+          );
+
+        // Brillo por color, barrido izquierda->derecha
+        loopTimeline
+          .to(
+            mark,
+            {
+              fill: "#62d399",
+              duration: 0.22,
+              ease: "sine.out",
+            },
+            0.12
+          )
+          .to(
+            mark,
+            {
+              fill: "#4dc083",
+              duration: 0.45,
+              ease: "sine.inOut",
+            },
+            0.36
+          )
+          .to(
+            letters,
+            {
+              fill: "#767273",
+              opacity: 0.88,
+              y: -1.6,
+              duration: 0.24,
+              ease: "sine.out",
+              stagger: { each: 0.03, from: "start" },
+            },
+            0.18
+          )
+          .to(
+            letters,
+            {
+              fill: "#4f4c4d",
+              opacity: 1,
+              y: 0,
+              duration: 0.45,
+              ease: "sine.inOut",
+              stagger: { each: 0.03, from: "start" },
+            },
+            0.42
+          );
       };
 
       const intro = () => {
@@ -105,6 +173,8 @@ const logoSvg = await readFile(logoPath, "utf8");
           y: 8,
           x: 0,
           scaleX: 0,
+          rotation: 0,
+          fill: "#4dc083",
           transformOrigin: "left center",
           transformBox: "fill-box",
           force3D: true,
@@ -114,6 +184,7 @@ const logoSvg = await readFile(logoPath, "utf8");
           opacity: 0,
           y: 8,
           skewX: 2,
+          fill: "#4f4c4d",
           transformOrigin: "50% 50%",
           transformBox: "fill-box",
           force3D: true,
@@ -129,6 +200,7 @@ const logoSvg = await readFile(logoPath, "utf8");
             ease: "none",
             stagger: 0.01,
           });
+          logoBlock.dataset.introDone = "true";
           return;
         }
 
@@ -154,7 +226,10 @@ const logoSvg = await readFile(logoPath, "utf8");
           0.24
         );
 
-        timeline.call(playLoop, [], ">+0.4");
+        timeline.call(() => {
+          logoBlock.dataset.introDone = "true";
+          playLoop();
+        }, [], ">+0.45");
       };
 
       const microHover = () => {
@@ -164,6 +239,27 @@ const logoSvg = await readFile(logoPath, "utf8");
           .to(mark, { x: 2, overwrite: "auto" })
           .to(mark, { x: 0, overwrite: "auto" }, ">0.02");
       };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          isVisible = Boolean(entry?.isIntersecting);
+
+          if (!isVisible) {
+            clearLoop();
+            gsap.set(mark, { scaleX: 1, x: 0, rotation: 0, fill: "#4dc083" });
+            gsap.set(letters, { opacity: 1, y: 0, fill: "#4f4c4d" });
+            return;
+          }
+
+          if (!media.matches && logoBlock.dataset.introDone === "true") {
+            playLoop();
+          }
+        },
+        { threshold: 0.05, rootMargin: "0px 0px -5% 0px" }
+      );
+
+      observer.observe(logoBlock);
 
       logoBlock.addEventListener("mouseenter", microHover);
       logoBlock.addEventListener("focusin", microHover);
