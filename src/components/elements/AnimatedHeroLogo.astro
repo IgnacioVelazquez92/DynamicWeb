@@ -1,4 +1,4 @@
----
+﻿---
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
@@ -6,11 +6,8 @@ const logoPath = join(process.cwd(), "public", "logos", "Dynamic_svg.svg");
 const logoSvg = await readFile(logoPath, "utf8");
 ---
 
-<div class="hero-logo-stage" data-hero-logo>
-  <div class="hero-logo-frame">
-    <div class="hero-logo-glow" aria-hidden="true"></div>
-    <div class="hero-logo-svg" set:html={logoSvg}></div>
-  </div>
+<div class="hero-logo-stage" data-hero-logo tabindex="0" aria-label="Dynamic">
+  <div class="hero-logo-svg" set:html={logoSvg}></div>
 </div>
 
 <style>
@@ -18,27 +15,20 @@ const logoSvg = await readFile(logoPath, "utf8");
     width: 100%;
     max-width: 48rem;
     margin-inline: auto;
-    perspective: 1200px;
-  }
-
-  .hero-logo-frame {
-    position: relative;
-    overflow: hidden;
-    transform-style: preserve-3d;
-  }
-
-  .hero-logo-glow {
-    position: absolute;
-    inset: 18% 10% 14%;
-
-    pointer-events: none;
   }
 
   .hero-logo-svg :global(svg) {
     width: 100%;
     height: auto;
     display: block;
-    will-change: transform;
+    overflow: visible;
+  }
+
+  .hero-logo-svg :global(#mark),
+  .hero-logo-svg :global(.letter) {
+    transform-box: fill-box;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
   }
 </style>
 
@@ -48,78 +38,138 @@ const logoSvg = await readFile(logoPath, "utf8");
   function initHeroLogoAnimation() {
     const logoBlocks = document.querySelectorAll<HTMLElement>("[data-hero-logo]");
     if (!logoBlocks.length) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     logoBlocks.forEach((logoBlock) => {
       if (logoBlock.dataset.gsapReady === "true") return;
-      logoBlock.dataset.gsapReady = "true";
 
       const svg = logoBlock.querySelector<SVGSVGElement>("svg");
-      const glow = logoBlock.querySelector<HTMLElement>(".hero-logo-glow");
-      const frame = logoBlock.querySelector<HTMLElement>(".hero-logo-frame");
       if (!svg) return;
 
-      const segments = svg.querySelectorAll(
-        "path, polygon, rect, circle, ellipse, line, polyline"
+      const paths = Array.from(
+        svg.querySelectorAll<SVGGraphicsElement>(
+          "path, polygon, rect, circle, ellipse, line, polyline"
+        )
       );
+      if (!paths.length) return;
 
-      gsap.set(svg, { transformOrigin: "50% 50%" });
-      gsap.set(segments, { transformOrigin: "50% 50%" });
+      const mark = paths.find((node) => {
+        const styleAttr = node.getAttribute("style") ?? "";
+        const fillAttr = (node.getAttribute("fill") ?? "").toLowerCase();
+        return /fill:\s*#4dc083/i.test(styleAttr) || fillAttr === "#4dc083";
+      });
+      if (!mark) return;
 
-      const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const letters = paths
+        .filter((node) => node !== mark)
+        .sort((a, b) => a.getBBox().x - b.getBBox().x);
 
-      timeline.fromTo(
-        logoBlock,
-        { autoAlpha: 0, y: 28, scale: 0.95, rotationX: 10 },
-        { autoAlpha: 1, y: 0, scale: 1, rotationX: 0, duration: 0.95 }
-      );
-
-      timeline.fromTo(
-        segments,
-        { autoAlpha: 0, y: 10, scale: 0.98 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.75,
-          stagger: { each: 0.018, from: "random" },
-          ease: "power2.out",
-        },
-        0.22
-      );
-
-      gsap.to(svg, {
-        y: -7,
-        x: 3,
-        rotation: 0.25,
-        duration: 3.4,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
+      mark.id = "mark";
+      letters.forEach((node, index) => {
+        node.classList.add("letter", `letter-${index + 1}`);
       });
 
-      if (frame) {
-        gsap.to(frame, {
-          rotateY: 1.4,
-          rotateX: -1.2,
-          duration: 4.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          transformOrigin: "50% 50%",
-        });
-      }
+      logoBlock.dataset.gsapReady = "true";
+      const media = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-      if (glow) {
-        gsap.to(glow, {
-          opacity: 0.72,
-          scale: 1.06,
-          duration: 2.8,
-          repeat: -1,
-          yoyo: true,
+      let pulseTween: gsap.core.Tween | null = null;
+      let pulseDelay: gsap.core.Tween | null = null;
+
+      const clearLoop = () => {
+        pulseTween?.kill();
+        pulseDelay?.kill();
+        pulseTween = null;
+        pulseDelay = null;
+      };
+
+      const playLoop = () => {
+        clearLoop();
+        pulseTween = gsap.to(mark, {
+          scaleX: 1.03,
+          duration: 0.75,
           ease: "sine.inOut",
+          yoyo: true,
+          repeat: 1,
+          overwrite: "auto",
+          onComplete: () => {
+            pulseDelay = gsap.delayedCall(7.2, playLoop);
+          },
         });
-      }
+      };
+
+      const intro = () => {
+        clearLoop();
+        gsap.killTweensOf([mark, ...letters]);
+
+        gsap.set(mark, {
+          opacity: 0,
+          y: 8,
+          x: 0,
+          scaleX: 0,
+          transformOrigin: "left center",
+          transformBox: "fill-box",
+          force3D: true,
+        });
+
+        gsap.set(letters, {
+          opacity: 0,
+          y: 8,
+          skewX: 2,
+          transformOrigin: "50% 50%",
+          transformBox: "fill-box",
+          force3D: true,
+        });
+
+        if (media.matches) {
+          gsap.to([mark, ...letters], {
+            opacity: 1,
+            y: 0,
+            skewX: 0,
+            scaleX: 1,
+            duration: 0.2,
+            ease: "none",
+            stagger: 0.01,
+          });
+          return;
+        }
+
+        const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+        timeline.to(mark, {
+          opacity: 1,
+          y: 0,
+          scaleX: 1,
+          duration: 0.42,
+          ease: "power2.out",
+        });
+
+        timeline.to(
+          letters,
+          {
+            opacity: 1,
+            y: 0,
+            skewX: 0,
+            duration: 0.46,
+            stagger: 0.045,
+          },
+          0.24
+        );
+
+        timeline.call(playLoop, [], ">+0.4");
+      };
+
+      const microHover = () => {
+        if (media.matches) return;
+        gsap
+          .timeline({ defaults: { duration: 0.18, ease: "power2.out" } })
+          .to(mark, { x: 2, overwrite: "auto" })
+          .to(mark, { x: 0, overwrite: "auto" }, ">0.02");
+      };
+
+      logoBlock.addEventListener("mouseenter", microHover);
+      logoBlock.addEventListener("focusin", microHover);
+      media.addEventListener("change", intro);
+
+      intro();
     });
   }
 
