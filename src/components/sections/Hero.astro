@@ -3,6 +3,7 @@ import Button from "../shared/Button.astro";
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
+import AnimatedHeroLogo from "../elements/AnimatedHeroLogo.astro";
 import ByNumber from "./ByNumber.astro";
 ---
 
@@ -73,21 +74,9 @@ import ByNumber from "./ByNumber.astro";
     <div
       class="flex flex-1 lg:w-1/2 lg:h-auto relative lg:max-w-none lg:mx-0 mx-auto max-w-3xl opacity-0 animate-fade-in-up delay-300"
     >
-      <div class="relative">
-        <div
-          class="absolute inset-0 bg-gradient-to-tr from-primary to-transparent opacity-20 rounded-3xl -rotate-2 scale-105 blur-lg"
-        >
-        </div>
-        <img
-          src="/logos/Dynamic_Identidad_Final2026.svg"
-          alt="Distribución Farmacéutica"
-          width="1500"
-          height="1500"
-          class="relative w-full h-full rounded-3xl object-cover shadow-2xl shadow-gray-200/50 dark:shadow-none transform transition-transform hover:scale-[1.02] duration-500"
-        />
-      </div>
+      <AnimatedHeroLogo />
     </div>
   </Container>
-
-  <ByNumber />
 </section>
+
+<ByNumber />

@@ -1,0 +1,135 @@
+---
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+
+const logoPath = join(process.cwd(), "public", "logos", "Dynamic_svg.svg");
+const logoSvg = await readFile(logoPath, "utf8");
+---
+
+<div class="hero-logo-stage" data-hero-logo>
+  <div class="hero-logo-frame">
+    <div class="hero-logo-glow" aria-hidden="true"></div>
+    <div class="hero-logo-svg" set:html={logoSvg}></div>
+  </div>
+</div>
+
+<style>
+  .hero-logo-stage {
+    width: 100%;
+    max-width: 48rem;
+    margin-inline: auto;
+    perspective: 1200px;
+  }
+
+  .hero-logo-frame {
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+  }
+
+  .hero-logo-glow {
+    position: absolute;
+    inset: 18% 10% 14%;
+
+    pointer-events: none;
+  }
+
+  .hero-logo-svg :global(svg) {
+    width: 100%;
+    height: auto;
+    display: block;
+    will-change: transform;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+
+  function initHeroLogoAnimation() {
+    const logoBlocks = document.querySelectorAll<HTMLElement>("[data-hero-logo]");
+    if (!logoBlocks.length) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    logoBlocks.forEach((logoBlock) => {
+      if (logoBlock.dataset.gsapReady === "true") return;
+      logoBlock.dataset.gsapReady = "true";
+
+      const svg = logoBlock.querySelector<SVGSVGElement>("svg");
+      const glow = logoBlock.querySelector<HTMLElement>(".hero-logo-glow");
+      const frame = logoBlock.querySelector<HTMLElement>(".hero-logo-frame");
+      if (!svg) return;
+
+      const segments = svg.querySelectorAll(
+        "path, polygon, rect, circle, ellipse, line, polyline"
+      );
+
+      gsap.set(svg, { transformOrigin: "50% 50%" });
+      gsap.set(segments, { transformOrigin: "50% 50%" });
+
+      const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      timeline.fromTo(
+        logoBlock,
+        { autoAlpha: 0, y: 28, scale: 0.95, rotationX: 10 },
+        { autoAlpha: 1, y: 0, scale: 1, rotationX: 0, duration: 0.95 }
+      );
+
+      timeline.fromTo(
+        segments,
+        { autoAlpha: 0, y: 10, scale: 0.98 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.75,
+          stagger: { each: 0.018, from: "random" },
+          ease: "power2.out",
+        },
+        0.22
+      );
+
+      gsap.to(svg, {
+        y: -7,
+        x: 3,
+        rotation: 0.25,
+        duration: 3.4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      if (frame) {
+        gsap.to(frame, {
+          rotateY: 1.4,
+          rotateX: -1.2,
+          duration: 4.2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          transformOrigin: "50% 50%",
+        });
+      }
+
+      if (glow) {
+        gsap.to(glow, {
+          opacity: 0.72,
+          scale: 1.06,
+          duration: 2.8,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initHeroLogoAnimation, {
+      once: true,
+    });
+  } else {
+    initHeroLogoAnimation();
+  }
+
+  document.addEventListener("astro:page-load", initHeroLogoAnimation);
+</script>
