@@ -18,6 +18,18 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
 </div>
 
 <style>
+  @property --hover-scale {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+  }
+
+  @property --hover-offset-y {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
+
   .hero-logo-stage {
     width: 100%;
     max-width: 48rem;
@@ -53,13 +65,16 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
   }
 
   .hero-logo-svg :global(.anim-path) {
+    --hover-scale: 0;
+    --hover-offset-y: 0px;
     transform-box: fill-box;
     transform-origin: center;
     backface-visibility: hidden;
     will-change: transform, opacity, fill;
     fill: currentColor !important;
     transition:
-      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      --hover-scale 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      --hover-offset-y 0.75s cubic-bezier(0.22, 1, 0.36, 1),
       color 0.5s ease,
       fill 0.5s ease,
       filter 0.5s ease;
@@ -83,7 +98,8 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
   .logo-trigger-area:hover .hero-logo-svg :global(.anim-path.letter),
   .logo-trigger-area:focus-visible .hero-logo-svg :global(.anim-path.letter) {
     animation-play-state: paused;
-    transform: scale(1.15) translateY(-5px);
+    --hover-scale: 0.15;
+    --hover-offset-y: -5px;
     filter: drop-shadow(0 0 10px rgba(77, 192, 131, 0.6));
   }
 
@@ -109,7 +125,8 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
   .logo-trigger-area:hover .hero-logo-svg :global(.anim-path.green-dot),
   .logo-trigger-area:focus-visible .hero-logo-svg :global(.anim-path.green-dot) {
     animation-play-state: paused;
-    transform: scale(1.15) translateY(-5px) rotateX(360deg);
+    --hover-scale: 0.15;
+    --hover-offset-y: -5px;
     filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9));
   }
 
@@ -131,35 +148,35 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
     0%,
     15% {
       filter: drop-shadow(0 0 2px rgba(77, 192, 131, 0.5));
-      transform: rotateX(0deg);
+      transform: translateY(var(--hover-offset-y)) scale(calc(1 + var(--hover-scale))) rotateX(0deg);
     }
     25% {
       filter: drop-shadow(0 0 15px rgba(77, 192, 131, 1));
-      transform: rotateX(0deg);
+      transform: translateY(var(--hover-offset-y)) scale(calc(1 + var(--hover-scale))) rotateX(0deg);
     }
     35% {
       filter: drop-shadow(0 0 15px rgba(77, 192, 131, 1));
-      transform: rotateX(360deg);
+      transform: translateY(var(--hover-offset-y)) scale(calc(1 + var(--hover-scale))) rotateX(360deg);
     }
     50%,
     100% {
       filter: drop-shadow(0 0 2px rgba(77, 192, 131, 0.5));
-      transform: rotateX(360deg);
+      transform: translateY(var(--hover-offset-y)) scale(calc(1 + var(--hover-scale))) rotateX(360deg);
     }
   }
 
   @keyframes letter-wave {
     0%,
     100% {
-      transform: translateY(0) scale(1);
+      transform: translateY(calc(0px + var(--hover-offset-y))) scale(calc(1 + var(--hover-scale)));
       filter: drop-shadow(0 0 0 rgba(77, 192, 131, 0));
     }
     35% {
-      transform: translateY(-1.6px) scale(1.015);
+      transform: translateY(calc(-1.6px + var(--hover-offset-y))) scale(calc(1.015 + var(--hover-scale)));
       filter: drop-shadow(0 0 4px rgba(77, 192, 131, 0.16));
     }
     60% {
-      transform: translateY(-2.4px) scale(1.022);
+      transform: translateY(calc(-2.4px + var(--hover-offset-y))) scale(calc(1.022 + var(--hover-scale)));
       filter: drop-shadow(0 0 6px rgba(77, 192, 131, 0.2));
     }
   }
