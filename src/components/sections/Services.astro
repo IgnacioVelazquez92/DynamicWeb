@@ -3,6 +3,8 @@ import Service from "../cards/Service.astro";
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
 import Title from "../shared/Title.astro";
+
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <section id="services">
@@ -17,19 +19,19 @@ import Title from "../shared/Title.astro";
       <Service
         title="Logística Farmacéutica"
         description="Distribución eficiente y segura a farmacias y centros de salud en todo el país."
-        icon="/images/Logistica.png"
+        icon={`${baseUrl}images/Logistica.png`}
         iconAlt="Logística farmacéutica"
       />
       <Service
         title="Distribuidor de insumos médicos y medicamentos"
         description="Abastecimiento confiable de insumos médicos y medicamentos para instituciones de salud y farmacias."
-        icon="/images/medicamentos.png"
+        icon={`${baseUrl}images/medicamentos.png`}
         iconAlt="Insumos médicos y medicamentos"
       />
       <Service
         title="Atención Personalizada"
         description="Equipo comercial dedicado para asistir a nuestros clientes en cada requerimiento."
-        icon="/images/ventas.png"
+        icon={`${baseUrl}images/ventas.png`}
         iconAlt="Atención personalizada"
       />
     </div>

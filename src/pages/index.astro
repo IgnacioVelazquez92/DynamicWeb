@@ -7,13 +7,17 @@ import AboutUs from "../components/sections/AboutUs.astro";
 import CTA from "../components/sections/CTA.astro";
 import Contact from "../components/sections/Contact.astro";
 
+const baseUrl = import.meta.env.BASE_URL;
+const siteOrigin = "https://dynamicsa.com.ar";
+const logoUrl = new URL(`${baseUrl}logos/Dynamic.png`, siteOrigin).toString();
+
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "Pharmacy",
   name: "Dynamic SA",
-  url: "https://dynamicsa.com.ar/",
-  logo: "https://dynamicsa.com.ar/logos/Dynamic.png",
-  image: "https://dynamicsa.com.ar/logos/Dynamic.png",
+  url: new URL(baseUrl, siteOrigin).toString(),
+  logo: logoUrl,
+  image: logoUrl,
   description:
     "Drogueria y distribuidora farmaceutica. Comercializacion y distribucion de medicamentos e insumos medicos en Cordoba y Tucuman.",
   email: "comercial@dynamicsa.com.ar",
