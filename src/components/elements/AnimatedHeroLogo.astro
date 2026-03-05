@@ -9,10 +9,10 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
 ---
 
 <div class="hero-logo-stage" aria-label="Dynamic">
-  <div class="hero-logo-variant dark:hidden" data-hero-logo tabindex="0" aria-label="Dynamic logo claro">
+  <div class="hero-logo-variant logo-trigger-area dark:hidden" data-hero-logo tabindex="0" aria-label="Dynamic logo claro">
     <div class="hero-logo-svg" set:html={logoSvg}></div>
   </div>
-  <div class="hero-logo-variant hidden dark:block" data-hero-logo tabindex="0" aria-label="Dynamic logo oscuro">
+  <div class="hero-logo-variant logo-trigger-area hidden dark:block" data-hero-logo tabindex="0" aria-label="Dynamic logo oscuro">
     <div class="hero-logo-svg" set:html={logoDarkSvg}></div>
   </div>
 </div>
@@ -31,16 +31,198 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
     overflow: visible;
   }
 
-  .hero-logo-svg :global(#mark),
-  .hero-logo-svg :global(.letter) {
+  .hero-logo-variant {
+    --stagger-delay: 0.04s;
+  }
+
+  .logo-trigger-area {
+    background-color: rgba(255, 255, 255, 0.001);
+    cursor: pointer;
+  }
+
+  .hero-logo-svg :global(.dynamic-logo) {
+    animation: float 6s ease-in-out infinite;
+    overflow: visible;
+    will-change: transform;
+    animation-play-state: paused;
+    transition: filter 0.35s ease;
+  }
+
+  .hero-logo-variant[data-intro-done="true"] .hero-logo-svg :global(.dynamic-logo) {
+    animation-play-state: running;
+  }
+
+  .hero-logo-svg :global(.anim-path) {
     transform-box: fill-box;
+    transform-origin: center;
     backface-visibility: hidden;
     will-change: transform, opacity, fill;
+    fill: currentColor !important;
+    transition:
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.5s ease,
+      fill 0.5s ease,
+      filter 0.5s ease;
+  }
+
+  .hero-logo-svg :global(.anim-path.letter) {
+    color: var(--letter-base-color, #4f4c4d);
+    animation: letter-wave 5.2s ease-in-out infinite;
+    animation-delay: calc(var(--stagger-delay) * var(--stagger-index, 0));
+    animation-play-state: paused;
+  }
+
+  .hero-logo-variant[data-intro-done="true"] .hero-logo-svg :global(.anim-path.letter) {
+    animation-play-state: running;
+  }
+
+  .hero-logo-svg :global(.logo-wrapper > g .anim-path) {
+    transition-delay: calc(var(--stagger-delay) * var(--stagger-index, 0));
+  }
+
+  .logo-trigger-area:hover .hero-logo-svg :global(.anim-path.letter),
+  .logo-trigger-area:focus-visible .hero-logo-svg :global(.anim-path.letter) {
+    animation-play-state: paused;
+    transform: scale(1.15) translateY(-5px);
+    filter: drop-shadow(0 0 10px rgba(77, 192, 131, 0.6));
+  }
+
+  .logo-trigger-area:hover .hero-logo-svg :global(.dynamic-logo),
+  .logo-trigger-area:focus-visible .hero-logo-svg :global(.dynamic-logo) {
+    filter: drop-shadow(0 15px 35px rgba(77, 192, 131, 0.15));
+  }
+
+  .hero-logo-svg :global(.anim-path.green-dot) {
+    color: #4dc083;
+    transition-duration: 1.2s;
+    transform-origin: center;
+    transform-box: fill-box;
+    transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: pulse-glow-flip 4s infinite linear;
+    animation-play-state: paused;
+  }
+
+  .hero-logo-variant[data-intro-done="true"] .hero-logo-svg :global(.anim-path.green-dot) {
+    animation-play-state: running;
+  }
+
+  .logo-trigger-area:hover .hero-logo-svg :global(.anim-path.green-dot),
+  .logo-trigger-area:focus-visible .hero-logo-svg :global(.anim-path.green-dot) {
+    animation-play-state: paused;
+    transform: scale(1.15) translateY(-5px) rotateX(360deg);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9));
+  }
+
+  .logo-trigger-area:not(:hover):not(:focus-visible) .hero-logo-svg :global(.anim-path) {
+    transition-delay: 0s !important;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse-glow-flip {
+    0%,
+    15% {
+      filter: drop-shadow(0 0 2px rgba(77, 192, 131, 0.5));
+      transform: rotateX(0deg);
+    }
+    25% {
+      filter: drop-shadow(0 0 15px rgba(77, 192, 131, 1));
+      transform: rotateX(0deg);
+    }
+    35% {
+      filter: drop-shadow(0 0 15px rgba(77, 192, 131, 1));
+      transform: rotateX(360deg);
+    }
+    50%,
+    100% {
+      filter: drop-shadow(0 0 2px rgba(77, 192, 131, 0.5));
+      transform: rotateX(360deg);
+    }
+  }
+
+  @keyframes letter-wave {
+    0%,
+    100% {
+      transform: translateY(0) scale(1);
+      filter: drop-shadow(0 0 0 rgba(77, 192, 131, 0));
+    }
+    35% {
+      transform: translateY(-1.6px) scale(1.015);
+      filter: drop-shadow(0 0 4px rgba(77, 192, 131, 0.16));
+    }
+    60% {
+      transform: translateY(-2.4px) scale(1.022);
+      filter: drop-shadow(0 0 6px rgba(77, 192, 131, 0.2));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-logo-svg :global(.dynamic-logo),
+    .hero-logo-svg :global(.anim-path.green-dot) {
+      animation: none !important;
+    }
+
+    .hero-logo-svg :global(.anim-path) {
+      transition-duration: 0.01ms !important;
+      transition-delay: 0s !important;
+    }
+
+    .hero-logo-svg :global(.anim-path.letter) {
+      animation: none !important;
+    }
   }
 </style>
 
 <script>
   import { gsap } from "gsap";
+
+  function clearIntroTransforms(nodes: SVGGraphicsElement[]) {
+    nodes.forEach((node) => {
+      node.style.removeProperty("transform");
+      node.style.removeProperty("transform-origin");
+      node.style.removeProperty("fill");
+      node.removeAttribute("transform");
+      node.removeAttribute("data-svg-origin");
+    });
+  }
+
+  function prepareLogoStructure(svg: SVGSVGElement) {
+    svg.classList.add("dynamic-logo");
+
+    const firstGroup = svg.querySelector<SVGGElement>(":scope > g");
+    const logoWrapper = firstGroup ?? svg;
+    if (logoWrapper instanceof SVGGElement) {
+      logoWrapper.classList.add("logo-wrapper");
+    }
+
+    const directPaths = Array.from(logoWrapper.querySelectorAll(":scope > path"));
+    directPaths.forEach((pathNode) => {
+      const wrap = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      pathNode.parentNode?.insertBefore(wrap, pathNode);
+      wrap.appendChild(pathNode);
+    });
+
+    const groups = Array.from(logoWrapper.querySelectorAll<SVGGElement>(":scope > g"));
+    groups.forEach((groupNode, index) => {
+      groupNode.style.setProperty("--stagger-index", String(index + 1));
+    });
+
+    const allPaths = Array.from(
+      svg.querySelectorAll<SVGGraphicsElement>(
+        "path, polygon, rect, circle, ellipse, line, polyline"
+      )
+    );
+
+    return { logoWrapper, allPaths };
+  }
 
   function initHeroLogoAnimation() {
     const logoBlocks = document.querySelectorAll<HTMLElement>("[data-hero-logo]");
@@ -52,11 +234,7 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
       const svg = logoBlock.querySelector<SVGSVGElement>("svg");
       if (!svg) return;
 
-      const paths = Array.from(
-        svg.querySelectorAll<SVGGraphicsElement>(
-          "path, polygon, rect, circle, ellipse, line, polyline"
-        )
-      );
+      const { allPaths: paths } = prepareLogoStructure(svg);
       if (!paths.length) return;
 
       const mark = paths.find((node) => {
@@ -78,111 +256,18 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
       };
 
       const baseLetterFill = getFillColor(letters[0] ?? mark);
-      const pulseLetterFill = baseLetterFill === "#c6c8cc" ? "#e2e4e8" : "#767273";
+      logoBlock.style.setProperty("--letter-base-color", baseLetterFill);
 
-      mark.id = "mark";
+      mark.classList.add("anim-path", "green-dot");
+
       letters.forEach((node, index) => {
-        node.classList.add("letter", `letter-${index + 1}`);
+        node.classList.add("anim-path", "letter", `letter-${index + 1}`);
       });
 
       logoBlock.dataset.gsapReady = "true";
       const media = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-      let loopTimeline: gsap.core.Timeline | null = null;
-      let loopDelay: gsap.core.Tween | null = null;
-      let isVisible = true;
-
-      const clearLoop = () => {
-        loopTimeline?.kill();
-        loopDelay?.kill();
-        loopTimeline = null;
-        loopDelay = null;
-      };
-
-      const playLoop = () => {
-        if (!isVisible || media.matches) return;
-        clearLoop();
-
-        loopTimeline = gsap.timeline({
-          defaults: { overwrite: "auto" },
-          onComplete: () => {
-            loopDelay = gsap.delayedCall(5.8, playLoop);
-          },
-        });
-
-        // Micro-gesto de la D
-        loopTimeline
-          .to(
-            mark,
-            {
-              rotation: -0.8,
-              x: 1,
-              duration: 0.24,
-              ease: "power2.out",
-              transformOrigin: "left center",
-              transformBox: "fill-box",
-            },
-            0
-          )
-          .to(
-            mark,
-            {
-              rotation: 0,
-              x: 0,
-              duration: 0.42,
-              ease: "sine.out",
-            },
-            0.24
-          );
-
-        // Brillo por color, barrido izquierda->derecha
-        loopTimeline
-          .to(
-            mark,
-            {
-              fill: "#62d399",
-              duration: 0.22,
-              ease: "sine.out",
-            },
-            0.12
-          )
-          .to(
-            mark,
-            {
-              fill: "#4dc083",
-              duration: 0.45,
-              ease: "sine.inOut",
-            },
-            0.36
-          )
-          .to(
-            letters,
-            {
-              fill: pulseLetterFill,
-              opacity: 0.88,
-              y: -1.6,
-              duration: 0.24,
-              ease: "sine.out",
-              stagger: { each: 0.03, from: "start" },
-            },
-            0.18
-          )
-          .to(
-            letters,
-            {
-              fill: baseLetterFill,
-              opacity: 1,
-              y: 0,
-              duration: 0.45,
-              ease: "sine.inOut",
-              stagger: { each: 0.03, from: "start" },
-            },
-            0.42
-          );
-      };
-
       const intro = () => {
-        clearLoop();
         gsap.killTweensOf([mark, ...letters]);
 
         gsap.set(mark, {
@@ -217,6 +302,7 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
             ease: "none",
             stagger: 0.01,
           });
+          clearIntroTransforms([mark, ...letters]);
           logoBlock.dataset.introDone = "true";
           return;
         }
@@ -244,42 +330,10 @@ const logoDarkSvg = await readFile(logoDarkPath, "utf8");
         );
 
         timeline.call(() => {
+          clearIntroTransforms([mark, ...letters]);
           logoBlock.dataset.introDone = "true";
-          playLoop();
         }, [], ">+0.45");
       };
-
-      const microHover = () => {
-        if (media.matches) return;
-        gsap
-          .timeline({ defaults: { duration: 0.18, ease: "power2.out" } })
-          .to(mark, { x: 2, overwrite: "auto" })
-          .to(mark, { x: 0, overwrite: "auto" }, ">0.02");
-      };
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          const entry = entries[0];
-          isVisible = Boolean(entry?.isIntersecting);
-
-          if (!isVisible) {
-            clearLoop();
-            gsap.set(mark, { scaleX: 1, x: 0, rotation: 0, fill: "#4dc083" });
-            gsap.set(letters, { opacity: 1, y: 0, fill: baseLetterFill });
-            return;
-          }
-
-          if (!media.matches && logoBlock.dataset.introDone === "true") {
-            playLoop();
-          }
-        },
-        { threshold: 0.05, rootMargin: "0px 0px -5% 0px" }
-      );
-
-      observer.observe(logoBlock);
-
-      logoBlock.addEventListener("mouseenter", microHover);
-      logoBlock.addEventListener("focusin", microHover);
       media.addEventListener("change", intro);
 
       intro();
