@@ -4,10 +4,17 @@ import { join } from "node:path";
 
 const logoPath = join(process.cwd(), "public", "logos", "Dynamic_svg.svg");
 const logoSvg = await readFile(logoPath, "utf8");
+const logoDarkPath = join(process.cwd(), "public", "logos", "Dynamic_svg_dark.svg");
+const logoDarkSvg = await readFile(logoDarkPath, "utf8");
 ---
 
-<div class="hero-logo-stage" data-hero-logo tabindex="0" aria-label="Dynamic">
-  <div class="hero-logo-svg" set:html={logoSvg}></div>
+<div class="hero-logo-stage" aria-label="Dynamic">
+  <div class="hero-logo-variant dark:hidden" data-hero-logo tabindex="0" aria-label="Dynamic logo claro">
+    <div class="hero-logo-svg" set:html={logoSvg}></div>
+  </div>
+  <div class="hero-logo-variant hidden dark:block" data-hero-logo tabindex="0" aria-label="Dynamic logo oscuro">
+    <div class="hero-logo-svg" set:html={logoDarkSvg}></div>
+  </div>
 </div>
 
 <style>
@@ -62,6 +69,16 @@ const logoSvg = await readFile(logoPath, "utf8");
       const letters = paths
         .filter((node) => node !== mark)
         .sort((a, b) => a.getBBox().x - b.getBBox().x);
+
+      const getFillColor = (node: SVGGraphicsElement) => {
+        const styleAttr = node.getAttribute("style") ?? "";
+        const styleMatch = styleAttr.match(/fill:\s*([^;]+)/i);
+        const fillAttr = node.getAttribute("fill");
+        return (styleMatch?.[1] ?? fillAttr ?? "#4f4c4d").trim().toLowerCase();
+      };
+
+      const baseLetterFill = getFillColor(letters[0] ?? mark);
+      const pulseLetterFill = baseLetterFill === "#c6c8cc" ? "#e2e4e8" : "#767273";
 
       mark.id = "mark";
       letters.forEach((node, index) => {
@@ -141,7 +158,7 @@ const logoSvg = await readFile(logoPath, "utf8");
           .to(
             letters,
             {
-              fill: "#767273",
+              fill: pulseLetterFill,
               opacity: 0.88,
               y: -1.6,
               duration: 0.24,
@@ -153,7 +170,7 @@ const logoSvg = await readFile(logoPath, "utf8");
           .to(
             letters,
             {
-              fill: "#4f4c4d",
+              fill: baseLetterFill,
               opacity: 1,
               y: 0,
               duration: 0.45,
@@ -184,7 +201,7 @@ const logoSvg = await readFile(logoPath, "utf8");
           opacity: 0,
           y: 8,
           skewX: 2,
-          fill: "#4f4c4d",
+          fill: baseLetterFill,
           transformOrigin: "50% 50%",
           transformBox: "fill-box",
           force3D: true,
@@ -248,7 +265,7 @@ const logoSvg = await readFile(logoPath, "utf8");
           if (!isVisible) {
             clearLoop();
             gsap.set(mark, { scaleX: 1, x: 0, rotation: 0, fill: "#4dc083" });
-            gsap.set(letters, { opacity: 1, y: 0, fill: "#4f4c4d" });
+            gsap.set(letters, { opacity: 1, y: 0, fill: baseLetterFill });
             return;
           }
 

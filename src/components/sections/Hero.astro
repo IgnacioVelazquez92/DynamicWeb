@@ -1,10 +1,9 @@
----
-import Button from "../shared/Button.astro";
+﻿---
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
 import AnimatedHeroLogo from "../elements/AnimatedHeroLogo.astro";
-import ByNumber from "./ByNumber.astro";
+import ContactChannelsModal from "../elements/ContactChannelsModal.astro";
 ---
 
 <section class="relative pt-32 lg:pt-36 overflow-hidden">
@@ -53,11 +52,43 @@ import ByNumber from "./ByNumber.astro";
       >
         <div class="flex sm:flex-row flex-col gap-5 w-full">
           <div class="flex flex-col sm:flex-row gap-4 w-full">
-            <BtnLink
-              text="Contáctenos"
-              href="#contact"
+            <ContactChannelsModal
               className="flex justify-center w-full sm:w-max shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-shadow"
-              variant="primary"
+              buttonText="Contáctenos"
+              modalTitle="Contacte al área correcta"
+              modalSubtitle="Seleccione sucursal y área."
+              branches={[
+                {
+                  branch: "Sucursal Córdoba",
+                  options: [
+                    {
+                      area: "Nutrición",
+                      phoneLabel: "+54 9 3512 67-0600",
+                      whatsappHref: "#",
+                    },
+                    {
+                      area: "Ostomía",
+                      phoneLabel: "+54 9 3512 67-0601",
+                      whatsappHref: "#",
+                    },
+                  ],
+                },
+                {
+                  branch: "Sucursal Tucumán",
+                  options: [
+                    {
+                      area: "Nutrición",
+                      phoneLabel: "+54 9 381 000-0000",
+                      whatsappHref: "#",
+                    },
+                    {
+                      area: "Ostomía",
+                      phoneLabel: "+54 9 381 000-0001",
+                      whatsappHref: "#",
+                    },
+                  ],
+                },
+              ]}
             />
 
             <BtnLink
@@ -78,5 +109,3 @@ import ByNumber from "./ByNumber.astro";
     </div>
   </Container>
 </section>
-
-<ByNumber />
