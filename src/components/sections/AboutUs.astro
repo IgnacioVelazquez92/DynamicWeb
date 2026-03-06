@@ -7,47 +7,66 @@ import Title from "../shared/Title.astro";
 const baseUrl = import.meta.env.BASE_URL;
 ---
 
-<section id="about-us">
-  <Container className="flex flex-col midmd:flex-row gap-10 lg:gap-12">
-    <div
-      class="max-w-md mx-auto midmd:max-w-none lg:mx-0 lg:pr-10 xl:pr-2 flex-1 flex w-11/12 midmd:w-5/12 lg:w-1/2 midmd:h-auto"
-    >
-      <div class="w-full h-80 sm:h-96 midmd:h-full relative">
-        <div
-          class="absolute rotate-45 -left-5 md:-left-10 lg:-left-20 xl:-left-24 p-1 top-1/2 w-16 h-16 bg-gradient-to-br from-primary to-orange-400 blur-3xl opacity-50"
-        >
-        </div>
-        <div
-          class="absolute p-1 -top-4 md:-top-10 right-0 w-20 h-20 bg-gradient-to-br from-primary to-orange-400 rounded-full blur-3xl opacity-60"
-        >
+<section id="about-us" class="relative overflow-hidden">
+  <Container>
+    <div class="grid gap-6 lg:gap-8">
+      <div
+        class="grid items-center gap-8 rounded-[2rem] border border-box-border bg-box-bg/80 p-6 shadow-xl shadow-box-shadow backdrop-blur-sm lg:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.9fr)] lg:p-8 xl:gap-10 xl:p-10"
+      >
+        <div class="order-2 min-w-0 lg:order-1">
+          <Title>
+            <span class="mt-4 block">Quiénes Somos</span>
+          </Title>
+          <Paragraph className="mt-6 max-w-3xl text-balance">
+            Somos una empresa integral de salud dedicada a conectar la
+            tecnología médica de excelencia con quienes más la necesitan. Nos
+            especializamos en el abastecimiento estratégico de insumos de alta
+            complejidad para el sector público y privado, y en la administración
+            de terapias para pacientes crónicos.
+          </Paragraph>
+          <Paragraph className="mt-4 max-w-3xl text-balance">
+            Desde nuestros inicios, nos enfocamos en garantizar que cada
+            producto llegue en el momento exacto, cumpliendo con los más
+            estrictos estándares de calidad, seguridad y trazabilidad en toda la
+            cadena de valor.
+          </Paragraph>
         </div>
 
-        <span
-          class="absolute w-full aspect-[16/5] -skew-x-12 rounded-full bg-gradient-to-tr from-primary to-secondary opacity-40 blur-2xl left-0 bottom-0"
-        ></span>
-        <img
-          src={`${baseUrl}images/dev-with-c-1.webp`}
-          alt="banner image"
-          width="1240"
-          height="1385"
-          class="w-auto left-1/2 -translate-x-1/2 absolute bottom-0 max-h-full"
-        />
+        <div
+          class="order-1 mx-auto flex w-full max-w-sm justify-center lg:order-2 lg:max-w-none"
+        >
+          <div class="relative h-80 w-full sm:h-96 lg:h-[28rem] xl:h-[30rem]">
+            <div
+              class="absolute top-1/2 -left-5 h-16 w-16 -translate-y-1/2 rotate-45 bg-gradient-to-br from-primary to-orange-400 p-1 opacity-50 blur-3xl md:-left-10"
+            >
+            </div>
+            <div
+              class="absolute -top-4 right-4 h-20 w-20 rounded-full bg-gradient-to-br from-primary to-orange-400 p-1 opacity-60 blur-3xl md:-top-8"
+            >
+            </div>
+            <div
+              class="absolute inset-x-6 bottom-4 top-10 rounded-[2rem] bg-linear-to-b from-white/70 via-white/20 to-transparent shadow-inner shadow-white/30 ring-1 ring-white/40 dark:from-gray-900/50 dark:via-gray-900/10 dark:ring-white/10"
+            >
+            </div>
+            <span
+              class="absolute bottom-2 left-0 aspect-[16/5] w-full -skew-x-12 rounded-full bg-gradient-to-tr from-primary to-secondary opacity-40 blur-2xl"
+            ></span>
+            <img
+              src={`${baseUrl}logos/Dynamic.png`}
+              alt="Equipo de Dynamic SA en operaciones de salud y distribución farmacéutica"
+              width="1240"
+              height="1385"
+              loading="lazy"
+              class="absolute bottom-0 left-1/2 max-h-full w-auto -translate-x-1/2"
+            />
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="flex-1 flex midmd:w-7/12 lg:w-1/2 flex-col">
-      <Title> Quiénes Somos </Title>
-      <Paragraph className="mt-8">
-        Somos una droguería líder comprometida con la salud y el bienestar.
-        Desde nuestros inicios, nos hemos dedicado a la distribución eficiente
-        de medicamentos y productos farmacéuticos, asegurando que cada entrega
-        cumpla con los más altos estándares de calidad y seguridad.
-      </Paragraph>
-      <div
-        class="pt-8 grid grid-cols-2 items-center gap-4 max-w-3xl md:max-w-[none]"
-      >
+
+      <div class="grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6">
         <Info
-          description="Proveer soluciones logísticas de excelencia para el sistema de salud."
           title="Misión"
+          description="Garantizar el acceso ininterrumpido a tecnología médica y tratamientos de alta complejidad, brindando soluciones de abastecimiento eficientes, seguras y transparentes para instituciones, junto con un acompañamiento empático y proactivo para cada paciente."
         >
           <span slot="icon">
             <svg
@@ -57,7 +76,7 @@ const baseUrl = import.meta.env.BASE_URL;
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-4 h-4 sm:w-5 sm:h-5"
+              class="h-4 w-4 sm:h-5 sm:w-5"
             >
               <path
                 stroke-linecap="round"
@@ -67,9 +86,10 @@ const baseUrl = import.meta.env.BASE_URL;
             </svg>
           </span>
         </Info>
+
         <Info
-          description="Ser el referente nacional en innovación y servicio farmacéutico."
           title="Visión"
+          description="Ser el socio estratégico y prestador integral de salud más confiable a nivel nacional, reconocidos por nuestra innovación operativa, nuestra capacidad logística y nuestro compromiso inquebrantable con la calidad de vida de las personas."
         >
           <span slot="icon">
             <svg
@@ -79,7 +99,7 @@ const baseUrl = import.meta.env.BASE_URL;
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-4 h-4 sm:w-5 sm:h-5"
+              class="h-4 w-4 sm:h-5 sm:w-5"
             >
               <path
                 stroke-linecap="round"
@@ -89,7 +109,8 @@ const baseUrl = import.meta.env.BASE_URL;
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              ></path>
             </svg>
           </span>
         </Info>
