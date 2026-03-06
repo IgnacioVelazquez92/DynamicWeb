@@ -18,6 +18,11 @@ export interface Props {
   branches?: BranchGroup[];
 }
 
+const buildWhatsappHref = (phoneLabel: string) => {
+  const digits = phoneLabel.replace(/\D/g, "");
+  return `https://wa.me/${digits}?text=Hola%20Dynamic%20SA%2C%20quiero%20realizar%20una%20consulta%20comercial.`;
+};
+
 const {
   className = "",
   buttonText = "Contactenos",
@@ -25,48 +30,33 @@ const {
   modalSubtitle = "Selecciona una sucursal y luego el area para iniciar WhatsApp.",
   branches = [
     {
-      branch: "Sucursal Cordoba",
+      branch: "Sucursal Córdoba",
       options: [
         {
-          area: "Nutricion",
+          area: "Ostomía",
           phoneLabel: "+54 9 3512 67-0600",
-          whatsappHref: "#",
-        },
-        {
-          area: "Ostomia",
-          phoneLabel: "+54 9 3512 67-0601",
-          whatsappHref: "#",
+          whatsappHref: buildWhatsappHref("+54 9 3512 67-0600"),
         },
       ],
     },
     {
-      branch: "Sucursal Tucuman",
+      branch: "Sucursal Tucumán",
       options: [
         {
-          area: "Nutricion",
-          phoneLabel: "+54 9 381 000-0000",
-          whatsappHref: "#",
-        },
-        {
-          area: "Ostomia",
-          phoneLabel: "+54 9 381 000-0001",
-          whatsappHref: "#",
+          area: "Nutrición",
+          phoneLabel: "+54 9 3816 64-0038",
+          whatsappHref: buildWhatsappHref("+54 9 3816 64-0038"),
         },
       ],
     },
   ],
 } = Astro.props;
 
-const testWhatsappNumber = "+54 9 3512 67-0600";
-const testWhatsappHref =
-  "https://wa.me/5493512670600?text=Hola%20Dynamic%20SA%2C%20quiero%20realizar%20una%20consulta%20comercial.";
-
 const normalizedBranches = branches.map((group) => ({
   ...group,
   options: group.options.map((option) => ({
     ...option,
-    phoneLabel: testWhatsappNumber,
-    whatsappHref: testWhatsappHref,
+    whatsappHref: option.whatsappHref === "#" ? buildWhatsappHref(option.phoneLabel) : option.whatsappHref,
   })),
 }));
 ---
