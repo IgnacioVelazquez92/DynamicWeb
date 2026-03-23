@@ -9,44 +9,117 @@ import Contact from "../components/sections/Contact.astro";
 
 const baseUrl = import.meta.env.BASE_URL;
 const siteOrigin = "https://dynamicsa.com.ar";
+const siteUrl = new URL(baseUrl, siteOrigin).toString();
 const logoUrl = new URL(`${baseUrl}logos/Dynamic.png`, siteOrigin).toString();
 
-const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": "Pharmacy",
-  name: "Dynamic SA",
-  url: new URL(baseUrl, siteOrigin).toString(),
-  logo: logoUrl,
-  image: logoUrl,
-  description:
-    "Drogueria y distribuidora farmaceutica. Comercializacion y distribucion de medicamentos e insumos medicos en Cordoba y Tucuman.",
-  email: "comercial@dynamicsa.com.ar",
-  telephone: "+54 9 3512 67-0600",
-  areaServed: ["Cordoba", "Tucuman", "Argentina"],
-  address: [
-    {
-      "@type": "PostalAddress",
-      streetAddress: "Santiago del Estero 1616",
-      addressLocality: "San Miguel de Tucuman",
-      addressRegion: "Tucuman",
-      addressCountry: "AR",
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Pharmacy",
+    "@id": `${siteUrl}#dynamic-sa`,
+    name: "Dynamic SA",
+    url: siteUrl,
+    logo: logoUrl,
+    image: logoUrl,
+    description:
+      "Dynamic SA es una droguería y distribuidora farmacéutica con sucursales en Córdoba y Tucumán. Brinda provisión institucional, gestión de padrones y atención al paciente.",
+    email: "comercial@dynamicsa.com.ar",
+    telephone: "+54 9 3512 67-0600",
+    areaServed: [
+      {
+        "@type": "State",
+        name: "Córdoba",
+      },
+      {
+        "@type": "State",
+        name: "Tucumán",
+      },
+      {
+        "@type": "Country",
+        name: "Argentina",
+      },
+    ],
+    address: [
+      {
+        "@type": "PostalAddress",
+        streetAddress: "Santiago del Estero 1616",
+        addressLocality: "San Miguel de Tucumán",
+        addressRegion: "Tucumán",
+        addressCountry: "AR",
+      },
+      {
+        "@type": "PostalAddress",
+        streetAddress: "Spilimbergo 6392",
+        addressLocality: "Córdoba",
+        addressRegion: "Córdoba",
+        addressCountry: "AR",
+      },
+    ],
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        areaServed: "AR-C",
+        availableLanguage: ["es"],
+        telephone: "+54 9 3512 67-0600",
+        email: "comercial@dynamicsa.com.ar",
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        areaServed: "AR-T",
+        availableLanguage: ["es"],
+        telephone: "+54 9 3816 64-0038",
+        email: "comercial@dynamicsa.com.ar",
+      },
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Servicios Dynamic SA",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Provisión Institucional",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Gestión de Padrones",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Atención al Paciente",
+          },
+        },
+      ],
     },
-    {
-      "@type": "PostalAddress",
-      streetAddress: "Spilimbergo 6392",
-      addressLocality: "Cordoba",
-      addressRegion: "Cordoba",
-      addressCountry: "AR",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}#website`,
+    url: siteUrl,
+    name: "Dynamic SA",
+    inLanguage: "es-AR",
+    publisher: {
+      "@id": `${siteUrl}#dynamic-sa`,
     },
-  ],
-};
+  },
+];
 ---
 
 <Layout
-  title="Drogueria y Distribucion Farmaceutica en Cordoba y Tucuman"
-  description="Dynamic SA es una drogueria y distribuidora farmaceutica en Cordoba y Tucuman. Abastecemos medicamentos e insumos medicos con rapidez, seguridad y trazabilidad para farmacias y centros de salud."
-  keywords="drogueria en cordoba, drogueria en tucuman, distribuidora farmaceutica, medicamentos por mayor, insumos medicos, dynamic sa"
-  structuredData={localBusinessSchema}
+  title="Dynamic SA | Droguería en Córdoba y Tucumán"
+  description="Dynamic SA es una droguería y distribuidora farmacéutica con sucursales en Córdoba y Tucumán. Brindamos provisión institucional, gestión de padrones, atención al paciente y distribución de insumos médicos."
+  keywords="dynamic sa, dynamic córdoba, dynamic cordoba, dynamic tucumán, dynamic tucuman, droguería en córdoba, droguería en tucumán, distribuidora farmacéutica, provisión institucional, gestión de padrones, atención al paciente, insumos médicos"
+  structuredData={structuredData}
 >
   <main class="flex flex-col gap-y-20 md:gap-y-32 overflow-hidden">
     <Hero />

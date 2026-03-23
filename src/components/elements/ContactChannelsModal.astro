@@ -7,6 +7,7 @@ export interface ContactOption {
 
 export interface BranchGroup {
   branch: string;
+  phoneInfo?: string;
   options: ContactOption[];
 }
 
@@ -27,25 +28,27 @@ const {
   className = "",
   buttonText = "Contactenos",
   modalTitle = "Canales de comunicacion",
-  modalSubtitle = "Selecciona una sucursal y luego el area para iniciar WhatsApp.",
+  modalSubtitle = "Selecciona una sucursal o llama al 0800 2683333 para comunicarte con nosotros.",
   branches = [
     {
-      branch: "Sucursal Córdoba",
+      branch: "Sucursal Tucumán",
+      phoneInfo: "Teléfono fijo: 0800 2683333 (opción 1)",
       options: [
         {
-          area: "Ostomía",
-          phoneLabel: "+54 9 3512 67-0600",
-          whatsappHref: buildWhatsappHref("+54 9 3512 67-0600"),
+          area: "WhatsApp",
+          phoneLabel: "+54 9 3816 64-0038",
+          whatsappHref: buildWhatsappHref("+54 9 3816 64-0038"),
         },
       ],
     },
     {
-      branch: "Sucursal Tucumán",
+      branch: "Sucursal Córdoba",
+      phoneInfo: "Teléfono fijo: 0800 2683333 (opción 2)",
       options: [
         {
-          area: "Nutrición",
-          phoneLabel: "+54 9 3816 64-0038",
-          whatsappHref: buildWhatsappHref("+54 9 3816 64-0038"),
+          area: "WhatsApp",
+          phoneLabel: "+54 9 3512 67-0600",
+          whatsappHref: buildWhatsappHref("+54 9 3512 67-0600"),
         },
       ],
     },
@@ -82,7 +85,7 @@ const normalizedBranches = branches.map((group) => ({
     ></button>
 
     <div
-      class="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-box-border bg-box-bg text-heading-2 shadow-2xl"
+      class="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-box-border bg-box-bg text-heading-2 shadow-2xl"
       role="dialog"
       aria-modal="true"
       aria-labelledby="contact-channels-title"
@@ -110,12 +113,13 @@ const normalizedBranches = branches.map((group) => ({
         </p>
       </div>
 
-      <div class="max-h-[78vh] overflow-y-auto overflow-x-hidden p-6 sm:p-8">
+      <div class="flex-1 overflow-y-auto overflow-x-hidden p-6 sm:p-8">
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
         {
           normalizedBranches.map((group) => (
             <section class="min-w-0 rounded-2xl border border-box-border bg-box-bg/90 p-5 shadow-sm backdrop-blur-sm transition-colors hover:border-secondary/40">
               <h3 class="text-base font-semibold text-heading-1 sm:text-lg">{group.branch}</h3>
+              {group.phoneInfo && <p class="mt-1 text-xs text-heading-3">{group.phoneInfo}</p>}
               <div class="mt-4 space-y-3">
                 {
                   group.options.map((option) => (
@@ -156,47 +160,64 @@ const normalizedBranches = branches.map((group) => ({
 </div>
 
 <script>
-  document.querySelectorAll("[data-contact-modal-root]").forEach((root) => {
-    const openButton = root.querySelector("[data-contact-open]");
-    const modal = root.querySelector("[data-contact-modal]");
-    const closeButtons = root.querySelectorAll("[data-contact-close]");
-    const closeButton = modal?.querySelector("[data-contact-close]");
-    let lastFocusedElement: HTMLElement | null = null;
+  function initContactModal() {
+    document.querySelectorAll("[data-contact-modal-root]").forEach((root) => {
+      const openButton = root.querySelector("[data-contact-open]");
+      const modal = root.querySelector("[data-contact-modal]");
+      const closeButtons = root.querySelectorAll("[data-contact-close]");
+      const closeButton = modal?.querySelector("[data-contact-close]");
+      let lastFocusedElement: HTMLElement | null = null;
 
-    if (!(openButton instanceof HTMLElement) || !(modal instanceof HTMLElement)) {
-      return;
-    }
-
-    document.body.appendChild(modal);
-
-    const openModal = () => {
-      lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-      modal.setAttribute("aria-hidden", "false");
-      document.body.classList.add("overflow-hidden");
-      if (closeButton instanceof HTMLElement) {
-        closeButton.focus();
+      if (!(openButton instanceof HTMLElement) || !(modal instanceof HTMLElement)) {
+        return;
       }
-    };
 
-    const closeModal = () => {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-      modal.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("overflow-hidden");
-      lastFocusedElement?.focus();
-    };
-
-    openButton.addEventListener("click", openModal);
-    closeButtons.forEach((button) => {
-      button.addEventListener("click", closeModal);
-    });
-
-    window.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && modal.getAttribute("aria-hidden") === "false") {
-        closeModal();
+      if (modal.dataset.initialized === "true") {
+        return;
       }
+      modal.dataset.initialized = "true";
+
+      if (modal.parentElement !== document.body) {
+        document.body.appendChild(modal);
+      }
+
+      const openModal = () => {
+        lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("overflow-hidden");
+        if (closeButton instanceof HTMLElement) {
+          closeButton.focus();
+        }
+      };
+
+      const closeModal = () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("overflow-hidden");
+        lastFocusedElement?.focus();
+      };
+
+      openButton.addEventListener("click", openModal);
+      closeButtons.forEach((button) => {
+        button.addEventListener("click", closeModal);
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && modal.getAttribute("aria-hidden") === "false") {
+          closeModal();
+        }
+      });
     });
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initContactModal);
+  } else {
+    initContactModal();
+  }
+
+  document.addEventListener("astro:after-swap", initContactModal);
 </script>

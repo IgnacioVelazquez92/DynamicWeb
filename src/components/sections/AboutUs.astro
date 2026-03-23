@@ -9,9 +9,9 @@ const baseUrl = import.meta.env.BASE_URL;
 
 <section id="about-us" class="relative overflow-hidden">
   <Container>
-    <div class="grid gap-6 lg:gap-8">
+    <div class="grid gap-4 lg:gap-5">
       <div
-        class="grid items-center gap-8 rounded-[2rem] border border-box-border bg-box-bg/80 p-6 shadow-xl shadow-box-shadow backdrop-blur-sm lg:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.9fr)] lg:p-8 xl:gap-10 xl:p-10"
+        class="grid items-center gap-6 px-1 pt-1 pb-1 lg:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.9fr)] lg:px-2 xl:gap-8"
       >
         <div class="order-2 min-w-0 lg:order-1">
           <Title>
@@ -20,15 +20,15 @@ const baseUrl = import.meta.env.BASE_URL;
           <Paragraph className="mt-6 max-w-3xl text-balance">
             Somos una empresa integral de salud dedicada a conectar la
             tecnología médica de excelencia con quienes más la necesitan. Nos
-            especializamos en el abastecimiento estratégico de insumos de alta
-            complejidad para el sector público y privado, y en la administración
+            especializamos en el abastecimiento estratégico de medicamentos e insumos
+            médicos de alta complejidad para el sector público y privado, y en la administración
             de terapias para pacientes crónicos.
           </Paragraph>
           <Paragraph className="mt-4 max-w-3xl text-balance">
             Desde nuestros inicios, nos enfocamos en garantizar que cada
             producto llegue en el momento exacto, cumpliendo con los más
             estrictos estándares de calidad, seguridad y trazabilidad en toda la
-            cadena de valor.
+            cadena de valor, con operaciones en Córdoba y Tucumán y alcance comercial en todo el país.
           </Paragraph>
         </div>
 
@@ -52,12 +52,20 @@ const baseUrl = import.meta.env.BASE_URL;
               class="absolute bottom-2 left-0 aspect-[16/5] w-full -skew-x-12 rounded-full bg-gradient-to-tr from-primary to-secondary opacity-40 blur-2xl"
             ></span>
             <img
-              src={`${baseUrl}logos/Dynamic.png`}
-              alt="Equipo de Dynamic SA en operaciones de salud y distribución farmacéutica"
+              src={`${baseUrl}logos/Dynamic_svg.svg`}
+              alt="Logo de Dynamic SA"
               width="1240"
-              height="1385"
+              height="420"
               loading="lazy"
-              class="absolute bottom-0 left-1/2 max-h-full w-auto -translate-x-1/2"
+              class="absolute left-1/2 top-1/2 block w-[82%] max-w-[22rem] -translate-x-1/2 -translate-y-1/2 dark:hidden"
+            />
+            <img
+              src={`${baseUrl}logos/Dynamic_svg_dark.svg`}
+              alt="Logo de Dynamic SA"
+              width="1240"
+              height="420"
+              loading="lazy"
+              class="absolute left-1/2 top-1/2 hidden w-[82%] max-w-[22rem] -translate-x-1/2 -translate-y-1/2 dark:block"
             />
           </div>
         </div>
